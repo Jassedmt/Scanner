@@ -11,12 +11,11 @@ turquoiseColour="\e[0;36m\033[1m"
 grayColour="\e[0;37m\033[1m"
 
 # Comprobar dependencias
-test -f /usr/bin/nmap
-
-if [ "$(echo $?)" == "0" ]; then
-        echo -e "${turquoiseColour}Las dependencias están satisfechas${endColour}"
+if ! command -v nmap >/dev/null 2>&1 || ! command -v xclip >/dev/null 2>&1; then
+    echo -e "${yellowColour}Faltan dependencias. Instalando nmap y xclip...${endColour}"
+    apt update -y >/dev/null && apt install nmap xclip -y >/dev/null && echo -e "${greenColour}Dependencias instaladas${endColour}"
 else
-        echo -e "${yellowColour}Hay que instalar dependencias${endColour}" && apt update >/dev/null && apt install nmap xclip -y >/dev/null && echo -e "${greenColour}Dependencias instaladas${endColour}"
+    echo -e "${turquoiseColour}Las dependencias están satisfechas${endColour}"
 fi
 
 if [ -z "$1" ]; then
